@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ShowIncrement } from "./ShowIncrement";
 
 export const CallbackHook = () => {
@@ -6,11 +6,15 @@ export const CallbackHook = () => {
     const [counter, setCounter] = useState(10);
 
     const incrementFather = useCallback(
-      () => {
-        setCounter ( (value) => value +1);// Mandamos un callback
+      (value) => {
+        setCounter ( (c) => c + value);// Mandamos un callback
       },
       [],
     )// Esto no cambia porque siempre apunta al mismo lugar de memoria
+    
+    useEffect(() => {
+      //incrementFather();
+    }, [incrementFather])
     
 
     //const incrementFather = () => {
