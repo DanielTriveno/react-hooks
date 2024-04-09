@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { TodoItem } from "../../src/08-useReducer/TodoItem";
 
 describe('Pruebas en el <TodoItem/> ', () => {
@@ -19,7 +19,7 @@ describe('Pruebas en el <TodoItem/> ', () => {
             <TodoItem 
                 todo={todo} 
                 onToggleTodo={onToggleTodoMock} 
-                onDeleteTodo={onToggleTodoMock}
+                onDeleteTodo={onDeleteTodoMock}
             />
         );
 
@@ -36,5 +36,54 @@ describe('Pruebas en el <TodoItem/> ', () => {
         //screen.debug();
     });
 
+    test('Debe de mostrar el Todo completado', () => { 
 
+        todo.done = true;
+
+        render( 
+            <TodoItem 
+                todo={todo} 
+                onToggleTodo={onToggleTodoMock} 
+                onDeleteTodo={onDeleteTodoMock}
+            />
+        );
+
+
+        const spanElement = screen.getByLabelText('span');
+        expect(spanElement.className).toContain('text-decoration-line-through')
+        
+    });
+    test('span debe de llamar el ToggleTodo cuando se hace click ', () => { 
+        
+        
+        render( 
+            <TodoItem 
+                todo={todo} 
+                onToggleTodo={onToggleTodoMock} 
+                onDeleteTodo={onDeleteTodoMock}
+            />
+        );    
+        const spanElement = screen.getByLabelText('span');
+        fireEvent.click( spanElement);
+
+        expect(onToggleTodoMock).toHaveBeenCalledWith(todo.id);
+    
+
+     });
+
+     test('button debe de llamar el deleteTodo ', () => { 
+        
+        
+        render( 
+            <TodoItem 
+                todo={todo} 
+                onToggleTodo={onToggleTodoMock} 
+                onDeleteTodo={onDeleteTodoMock}
+            />
+        );    
+        const deleteButton = screen.getByRole('button');
+        fireEvent.click( deleteButton);
+
+        expect(onDeleteTodoMock).toHaveBeenCalledWith(todo.id);
+     });
 });
